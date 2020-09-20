@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ActiveTickFeedHttpServer 0.0.0.0 ACTIVETICK_PORT activetick1.activetick.com ACTIVETICK_API_KEY ACTIVETICK_USER ACTIVETICK_PASSWORD

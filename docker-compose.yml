@@ -1,0 +1,32 @@
+version: '3'
+services:
+  at_server:
+    labels:
+      - autoheal=true
+      - at_server=true
+    build:
+      context: .
+      args:
+        - ACTIVETICK_USER=${ACTIVETICK_USER}
+        - ACTIVETICK_API_KEY=${ACTIVETICK_API_KEY}
+        - ACTIVETICK_PASSWORD=${ACTIVETICK_PASSWORD}
+        - ACTIVETICK_PORT=${ACTIVETICK_PORT}
+    ports:
+      - ${ACTIVETICK_PORT}:${ACTIVETICK_PORT}
+    stdin_open: true
+    tty: true
+    restart: on-failure
+    healthcheck:
+      test: [ 'CMD',  '/scripts/healthcheck.sh' ]
+      interval: 10s
+      timeout: 15s
+      retries: 2
+  at_healthcheck:
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=at_server
+      - AUTOHEAL_START_PERIOD=45
+      - AUTOHEAL_INTERVAL=15
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: "autoheal"
